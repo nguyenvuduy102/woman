@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chúc Mừng Ngày Phụ Nữ Việt Nam 20/10 - Vườn Hoa Yêu Thương</title>
+  <meta name="description" content="Trang web chúc mừng 20/10 với vườn hoa đung đưa theo gió, bầu trời trong xanh và những lời chúc đong đầy yêu thương.">
+  
+  <!-- Google Fonts: Quicksand & Playfair Display & Dancing Script -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
+</head>
+<body>
+  <!-- Canvas hiệu ứng cánh hoa bay & lấp lánh -->
+  <canvas id="petalCanvas" class="petal-canvas" aria-hidden="true"></canvas>
+
+  <!-- Bầu trời & Môi trường nền -->
+  <div class="sky-container">
+    <div class="sun"></div>
+    <div class="sun-flare"></div>
+    
+    <!-- Các tầng mây trôi tự nhiên -->
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+
+    <!-- Bướm lượn -->
+    <div class="butterfly butterfly-1">
+      <div class="wing left"></div>
+      <div class="wing right"></div>
+    </div>
+    <div class="butterfly butterfly-2">
+      <div class="wing left"></div>
+      <div class="wing right"></div>
+    </div>
+  </div>
+
+  <!-- Thanh công cụ góc trên -->
+  <header class="top-nav">
+    <div class="sound-control">
+      <button id="musicToggleBtn" class="glass-pill-btn" aria-label="Bật/Tắt âm thanh nhẹ nhàng" title="Âm nhạc êm dịu">
+        <span class="icon" id="musicIcon">🎵</span>
+        <span class="label" id="musicLabel">Nhạc nền</span>
+        <span class="audio-waves" id="audioWaves">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+    </div>
+
+    <div class="action-shortcuts">
+      <button id="customNameBtn" class="glass-pill-btn" title="Điền tên người nhận">
+        <span>💌</span> <span class="label">Gửi người thương</span>
+      </button>
+      <button id="randomWishBtn" class="glass-pill-btn primary" title="Chọn ngẫu nhiên một đóa hoa">
+        <span>✨</span> <span class="label">Hái hoa may mắn</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Tiêu đề chính chào mừng -->
+  <main class="main-content">
+    <section class="hero-section">
+      <div class="hero-badge">
+        <span class="sparkle">✨</span> 20 THÁNG 10 • NGÀY PHỤ NỮ VIỆT NAM <span class="sparkle">✨</span>
+      </div>
+      <h1 class="hero-title">
+        Vườn Hoa Yêu Thương
+      </h1>
+      <p class="hero-subtitle">
+        Gửi muôn ngàn đóa hoa tươi thắm cùng lời chúc vẹn tròn nhất tới những người phụ nữ tuyệt vời!
+      </p>
+      <p class="hero-guide">
+        <span class="hand-pointer">👇</span> Chạm vào từng đóa hoa đang đung đưa để mở lời chúc dành riêng cho bạn
+      </p>
+    </section>
+
+    <!-- Khu vườn hoa đung đưa theo gió -->
+    <section class="garden-viewport" aria-label="Vườn hoa chúc mừng 20/10">
+      <!-- Đồi cỏ nền xa -->
+      <div class="hill hill-back"></div>
+      <div class="hill hill-mid"></div>
+
+      <!-- Khung chứa các cây hoa -->
+      <div class="flower-meadow" id="flowerMeadow">
+        <!-- Hoa sẽ được khởi tạo linh hoạt qua JS hoặc markup -->
+      </div>
+
+      <!-- Đồi cỏ trước mặt -->
+      <div class="grass-foreground"></div>
+    </section>
+  </main>
+
+  <!-- Modal Chi Tiết Lời Chúc (Sử dụng thẻ <dialog> hiện đại) -->
+  <dialog id="wishDialog" class="wish-dialog" aria-labelledby="dialogTitle">
+    <div class="dialog-card">
+      <!-- Nút đóng nhanh -->
+      <button id="dialogCloseBtn" class="dialog-close-btn" aria-label="Đóng và trở lại vườn hoa" title="Trở lại vườn hoa">✕</button>
+
+      <div class="flower-preview-badge" id="flowerIconPreview">🌹</div>
+      
+      <div class="wish-header">
+        <span class="wish-category-tag" id="wishCategory">Dành Tặng Một Nửa Thế Giới</span>
+        <h2 class="dialog-title" id="dialogTitle">Đóa Hoa Rực Rỡ</h2>
+        <div class="recipient-tag" id="recipientDisplay" style="display: none;"></div>
+      </div>
+
+      <div class="wish-body">
+        <div class="quote-mark">“</div>
+        <p class="wish-text" id="wishContent">
+          Chúc bạn ngày 20/10 luôn xinh đẹp như hoa nở sớm mai, rạng rỡ và tràn ngập niềm hạnh phúc!
+        </p>
+        <div class="quote-mark end">”</div>
+        <div class="flower-meaning" id="flowerMeaning">
+          🌱 <em>Ý nghĩa loài hoa:</em> Biểu tượng của tình yêu nồng nàn và vẻ đẹp kiêu sa.
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button id="backToGardenBtn" class="action-btn back-btn">
+          <span class="btn-icon">🌸</span>
+          <span>Trở lại vườn hoa</span>
+        </button>
+        <button id="copyWishBtn" class="action-btn copy-btn">
+          <span class="btn-icon" id="copyIcon">📋</span>
+          <span id="copyLabel">Sao chép lời chúc</span>
+        </button>
+      </div>
+
+      <div class="other-flowers-nav">
+        <span>Chọn hoa kế tiếp:</span>
+        <div class="mini-flower-chips" id="flowerMiniList"></div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal cài đặt tên người nhận -->
+  <dialog id="nameDialog" class="name-dialog">
+    <div class="dialog-card compact">
+      <button id="nameDialogCloseBtn" class="dialog-close-btn" aria-label="Đóng">✕</button>
+      <h3>💌 Cá nhân hóa lời chúc</h3>
+      <p class="dialog-subtext">Nhập tên người bạn muốn gửi tặng (Mẹ, Chị Lan, Bé My, Em yêu...):</p>
+      
+      <form id="nameForm" method="dialog">
+        <div class="input-group">
+          <input type="text" id="recipientInput" placeholder="Ví dụ: Mẹ kính yêu, Vợ yêu, Bạn Thảo..." maxlength="30" autofocus>
+        </div>
+        <div class="name-dialog-buttons">
+          <button type="button" id="clearNameBtn" class="action-btn light-btn">Bỏ trống</button>
+          <button type="submit" id="saveNameBtn" class="action-btn primary-btn">Áp dụng ngay ✨</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Thông báo Toast nhanh -->
+  <div id="toastNotification" class="toast-notification" role="status" aria-live="polite">
+    Đã sao chép lời chúc thành công! 💖
+  </div>
+
+  <footer class="footer-credit">
+    <p>💐 Chúc mừng Ngày Phụ Nữ Việt Nam 20/10 • Món quà tinh thần từ trái tim</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
